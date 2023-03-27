@@ -1,11 +1,12 @@
 const express = require('express');
 const dataAccess = require('./dataAccess');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
-
 const apiRouter = express.Router(); // route for /api
+app.use(cors()); // enable cross-origin requests
 app.use('/api', apiRouter);
 
 // middleware to load data into memory.

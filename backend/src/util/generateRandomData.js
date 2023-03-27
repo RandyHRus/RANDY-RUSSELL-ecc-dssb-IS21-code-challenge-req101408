@@ -24,6 +24,7 @@ function Product(productId, productName, productOwnerName, developers, scrumMast
     this.productOwnerName = productOwnerName;
     this.developers = developers;
     this.scrumMasterName = scrumMasterName;
+    this.startDate = startDate;
     this.methodology = methodology;
 }
 
