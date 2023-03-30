@@ -1,5 +1,3 @@
-import Head from "next/head";
-import styles from "@/styles/Home.module.css";
 import {
     Button,
     Table,
@@ -71,7 +69,7 @@ export default function ProductsTable(props: { products: Product[] }) {
     ];
 
     return (
-        <Paper sx={{ width: "80%", overflow: "hidden" }}>
+        <Paper sx={{ overflow: "hidden" }}>
             <TableContainer sx={{ height: "50vh" }}>
                 <Table stickyHeader aria-label="sticky table" size="small">
                     <TableHead>

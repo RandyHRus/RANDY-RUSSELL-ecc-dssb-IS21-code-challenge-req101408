@@ -13,8 +13,9 @@ import {
 import React, { useEffect, useState } from "react";
 import ProductsTable from "../components/productsTable";
 import Product from "../product";
-
-const apiURL = "http://localhost:3000";
+import AddProductDialog from "@/components/addProductDialog";
+import { readProducts } from "../apiAccess";
+import { displayError } from "@/components/errorDisplay";
 
 interface Column {
     id: string;
@@ -22,32 +23,38 @@ interface Column {
     minWidth?: number;
 }
 
+const dialogIDs = {
+    addProductDialog: 0,
+    editProductDialog: 1,
+};
+
 export default function Home() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [dialogOpen, setDialogOpen] = React.useState(-1);
+
+    function handleDialogClose() {
+        setDialogOpen(-1);
+        refreshProducts();
+    }
+
+    function handleDialogOpen(dialogID: number) {
+        setDialogOpen(dialogID);
+    }
+
+    function refreshProducts() {
+        console.log("refreshing products.");
+        readProducts()
+            .then((products: Product[]) => {
+                setProducts(products);
+            })
+            .catch((err: string) => {
+                displayError(err);
+            });
+    }
 
     useEffect(() => {
-        async function fetchProducts() {
-            try {
-                console.log("fetching products");
-                const response = await fetch(apiURL + "/api/products");
-                const responseJson = await response.json();
-                setProducts(responseJson);
-            } catch (error) {
-                console.error("error getting products");
-            }
-        }
-        fetchProducts();
+        refreshProducts();
     }, []); // [] means this effect will only run on component mount.
-
-    const columns: readonly Column[] = [
-        { id: "productId", label: "Product number (ID)", minWidth: 170 },
-        { id: "productName", label: "Product name", minWidth: 100 },
-        { id: "scrumMasterName", label: "Scrum master", minWidth: 100 },
-        { id: "productOwnerName", label: "Product owner", minWidth: 100 },
-        { id: "developers", label: "Developers", minWidth: 100 },
-        { id: "startDate", label: "Start date", minWidth: 100 },
-        { id: "methodology", label: "Methodology", minWidth: 100 },
-    ];
 
     return (
         <>
@@ -61,7 +68,23 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <ProductsTable products={products} />
+                <div className={styles["menu-bar-wrapper"]}>
+                    <Button
+                        variant="contained"
+                        onClick={() =>
+                            handleDialogOpen(dialogIDs.addProductDialog)
+                        }
+                    >
+                        Add product
+                    </Button>
+                </div>
+                <div className={styles["products-table-wrapper"]}>
+                    <ProductsTable products={products} />
+                </div>
+                <AddProductDialog
+                    open={dialogOpen == dialogIDs.addProductDialog}
+                    handleClose={handleDialogClose}
+                />
             </main>
         </>
     );
