@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc &&node src/app.js",
     "test": "tsc && mocha",
-    "dev": "tsc &&node src/app.js",
+    "dev": "node src/app.js",
     "build": "tsc"
   },
   "author": "",
