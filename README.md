@@ -45,13 +45,13 @@ All requested features are implemented.
 - When you navigate to localhost:3001, you should see an "add product" button on the top right.
 - Form will be displayed to fill in product information
 - If you try to save a product with invalid fields, you will be notified with an error
-- If all form fields are filled in correctly, the new product will be added to the server, and changes will be displayed immediately
+- If all form fields are filled in correctly and you hit "save", the new product will be added to the server, and changes will be displayed immediately
 
 ### User story 3
 - At the right most column of every row, there exists an "edit" button to edit that product
 - Form will be displayed to fill in product information
 - If you try to save a product with invalid fields, you will be notified with an error
-- If all form fields are filled in correctly, the product will be updated in the server, and changes will be displayed immediately
+- If all form fields are filled in correctly and you hit "save", the product will be updated in the server, and changes will be displayed immediately
 
 ### User story 4
 - On top of the screen, there exists a search field labeled "Search scrum master"
