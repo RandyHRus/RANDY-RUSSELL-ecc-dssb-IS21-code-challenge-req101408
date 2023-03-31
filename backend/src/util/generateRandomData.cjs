@@ -11,27 +11,11 @@ const productNamePrefix = [
     "Cool",
     "Useful",
     "Fun",
-    "top secret",
 ];
 const productNameType = [
     "web app",
-    "microservice",
-    "management app",
+    "app",
     "web service",
-];
-const productNameAudience = [
-    "citizens",
-    "government officials",
-    "people",
-    "employees",
-];
-const productNamePurpose = [
-    "helping people",
-    "increasing productivity",
-    "managing business",
-    "educating",
-    "communication",
-    "time management"
 ];
 
 const firstNames = [
@@ -75,10 +59,7 @@ for (let i = 0; i < count; i++) {
     let productId = i;
     let productName =
         getRandomItem(productNamePrefix) + " " +
-        getRandomItem(productNameType) +
-        " used by " +
-        getRandomItem(productNameAudience) + " for " +
-        getRandomItem(productNamePurpose);
+        getRandomItem(productNameType);
 
     let productOwnerName = generateRandomName();
 

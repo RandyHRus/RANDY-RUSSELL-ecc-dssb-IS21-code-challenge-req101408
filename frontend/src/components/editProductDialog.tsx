@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Dialog,
     DialogTitle,
@@ -15,25 +15,24 @@ import {
 } from "@mui/material";
 import styles from "@/styles/Home.module.css";
 import Product from "@/product";
-import { createProduct } from "@/apiAccess";
+import { createProduct, updateProduct } from "@/apiAccess";
 import { displayError } from "./errorDisplay";
 
-export default function AddProductDialog(props: {
+export default function EditProductDialog(props: {
     open: boolean;
+    product: Product | null;
     handleClose: () => void;
 }) {
     const [productName, setProductName] = useState<string>("");
     const [scrumMasterName, setScrumMasterName] = useState<string>("");
     const [productOwnerName, setProductOwnerName] = useState<string>("");
     const [developers, setDevelopers] = useState<string>("");
-    const [startDate, setStartDate] = useState<string>("");
     const [methodology, setMethodology] = useState<string>("");
 
     const [productNameErr, setProductNameErr] = useState<string>("");
     const [scrumMasterErr, setScrumMasterErr] = useState<string>("");
     const [productOwnerErr, setProductOwnerErr] = useState<string>("");
     const [developersErr, setDevelopersErr] = useState<string>("");
-    const [startDateErr, setStartDateErr] = useState<string>("");
     const [methodologyErr, setMethodologyErr] = useState<string>("");
 
     function reset() {
@@ -41,36 +40,49 @@ export default function AddProductDialog(props: {
         setScrumMasterName("");
         setProductOwnerName("");
         setDevelopers("");
-        setStartDate("");
         setMethodology("");
 
         setProductNameErr("");
         setScrumMasterErr("");
         setProductOwnerErr("");
         setDevelopersErr("");
-        setStartDateErr("");
         setMethodologyErr("");
     }
+
+    useEffect(() => {
+        if (props.product == null) {
+            setProductName("");
+            setScrumMasterName("");
+            setProductOwnerName("");
+            setDevelopers("");
+            setMethodology("");
+        } else {
+            setProductName(props.product.productName);
+            setScrumMasterName(props.product.scrumMasterName);
+            setProductOwnerName(props.product.productOwnerName);
+            setDevelopers(props.product.developers.join(", "));
+            setMethodology(props.product.methodology);
+        }
+    }, [props.product]);
 
     function handleFieldChange(
         event: SelectChangeEvent,
         setFunction: (value: string) => void
     ) {
-        console.log(event.target.value as string);
         setFunction(event.target.value as string);
     }
 
     function handleSubmit(): void {
         let productRequest: Product = {
-            productId: -1, //will be generated in backend.
+            productId: props.product ? props.product.productId : -1,
             productName,
             productOwnerName,
+            startDate: props.product ? props.product.startDate : "2000/01/01",
             developers: developers.split(","),
-            startDate,
             scrumMasterName,
             methodology,
         };
-        createProduct(productRequest)
+        updateProduct(productRequest) //TODO
             .then((productResult) => {
                 props.handleClose();
                 reset();
@@ -81,7 +93,6 @@ export default function AddProductDialog(props: {
                 setScrumMasterErr(error.scrumMasterName);
                 setProductOwnerErr(error.productOwnerName);
                 setDevelopersErr(error.developers);
-                setStartDateErr(error.startDate);
                 setMethodologyErr(error.methodology);
             });
     }
@@ -93,9 +104,9 @@ export default function AddProductDialog(props: {
 
     return (
         <Dialog open={props.open} onClose={props.handleClose}>
-            <DialogTitle>Add product</DialogTitle>
+            <DialogTitle>Edit product</DialogTitle>
             <DialogContent>
-                <DialogContentText>Enter new product details</DialogContentText>
+                <DialogContentText>Enter product details</DialogContentText>
                 <TextField
                     autoFocus
                     margin="dense"
@@ -103,6 +114,7 @@ export default function AddProductDialog(props: {
                     label="Product name"
                     type="text"
                     fullWidth
+                    value={productName}
                     error={productNameErr != ""}
                     helperText={productNameErr}
                     variant="standard"
@@ -117,6 +129,7 @@ export default function AddProductDialog(props: {
                     label="Scrum master"
                     type="text"
                     fullWidth
+                    value={scrumMasterName}
                     error={scrumMasterErr != ""}
                     helperText={scrumMasterErr}
                     variant="standard"
@@ -131,12 +144,13 @@ export default function AddProductDialog(props: {
                     label="Product owner"
                     type="text"
                     fullWidth
+                    value={productOwnerName}
                     error={productOwnerErr != ""}
                     helperText={productOwnerErr}
                     variant="standard"
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleFieldChange(event, setProductOwnerName)
-                    }
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        handleFieldChange(event, setProductOwnerName);
+                    }}
                 />
                 <TextField
                     autoFocus
@@ -145,24 +159,12 @@ export default function AddProductDialog(props: {
                     label="developers (separate by comma)"
                     type="text"
                     fullWidth
+                    value={developers}
                     error={developersErr != ""}
                     helperText={developersErr}
                     variant="standard"
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         handleFieldChange(event, setDevelopers)
-                    }
-                />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="startDate"
-                    type="date"
-                    fullWidth
-                    error={startDateErr != ""}
-                    helperText={startDateErr}
-                    variant="standard"
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleFieldChange(event, setStartDate)
                     }
                 />
                 <FormControl fullWidth>

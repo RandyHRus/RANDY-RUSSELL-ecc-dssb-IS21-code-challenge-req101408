@@ -9,7 +9,6 @@ const app = express();
 const port = 3000;
 
 const apiRouter = express.Router(); // route for /api
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); //parse request body
 app.use(cors()); // enable cross-origin requests
 app.use("/api", apiRouter);
@@ -21,6 +20,7 @@ apiRouter.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
+// middleware to display request information
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {
     console.log("Received request");
     console.log("params: " + JSON.stringify(req.params));
@@ -48,7 +48,7 @@ apiRouter.get("/product/:productId", (req: Request, res: Response) => {
     }
 });
 
-// POST method route
+// Post one new product
 apiRouter.post("/product", (req: Request, res: Response) => {
     try {
         let product = dataAccess.postProduct(req.body);
@@ -58,14 +58,24 @@ apiRouter.post("/product", (req: Request, res: Response) => {
     }
 });
 
-// PUT method route
-apiRouter.put("/", (req: Request, res: Response) => {
-    res.send("PUT request");
+// Put one product
+apiRouter.put("/product", (req: Request, res: Response) => {
+    try {
+        let product = dataAccess.putProduct(req.body);
+        res.status(200).send(product);
+    } catch (error) {
+        res.status(400).send(JSON.parse((error as Error).message));
+    }
 });
 
-// DELETE method route
-apiRouter.delete("/", (req: Request, res: Response) => {
-    res.send("DELETE request");
+// Delete one product
+apiRouter.delete("/product/:productId", (req: Request, res: Response) => {
+    try {
+        let product = dataAccess.deleteProduct(req.body);
+        res.status(200);
+    } catch (error) {
+        res.status(400).send(JSON.parse((error as Error).message));
+    }
 });
 
 module.exports = app.listen(port, () => {

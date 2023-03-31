@@ -142,9 +142,8 @@ function postProduct(product: Product) {
     }
 
     try {
-        let newProductId = product.productId
-            ? product.productId
-            : generateNewID();
+        let newProductId =
+            product.productId != -1 ? product.productId : generateNewID();
         let newProduct: Product = {
             productId: newProductId,
             productName: product.productName,
@@ -172,7 +171,7 @@ function postProduct(product: Product) {
 /**
  * Edits one product
  * @param {number} productId
- * @returns {Product} product
+ * @returns {Product} the edited product
  */
 function putProduct(product: Product) {
     let oProductError = verifyProduct(product);
@@ -182,7 +181,7 @@ function putProduct(product: Product) {
         throw new Error(JSON.stringify(oProductError));
     }
 
-    let existingProduct = inMemoryDataDict[product.productId];
+    inMemoryDataDict[product.productId];
 
     let newProduct: Product = {
         productId: product.productId,
@@ -194,12 +193,14 @@ function putProduct(product: Product) {
         methodology: product.methodology,
     };
 
-    try {
-        postProduct(product);
-    } catch (error) {
-        console.log("could not edit product");
-        throw error;
-    }
+    inMemoryDataDict[product.productId] = newProduct;
+
+    fs.writeFileSync(
+        dataFilePath,
+        JSON.stringify(Object.values(inMemoryDataDict), null, 2)
+    );
+
+    return newProduct;
 }
 
 /**
@@ -216,8 +217,11 @@ function getProduct(productId: number) {
  * @returns {number} int
  */
 function generateNewID() {
-    //TODO: come up with better way to generate this
-    return Math.ceil(Math.random() * 100000000);
+    let maxId: number = -Infinity;
+    for (let [id, value] of Object.entries(inMemoryDataDict)) {
+        if (value.productId > maxId) maxId = value.productId;
+    }
+    return maxId + 1;
 }
 
 module.exports = {
@@ -225,4 +229,5 @@ module.exports = {
     getAllProducts: getAllProducts,
     getProduct: getProduct,
     postProduct: postProduct,
+    putProduct: putProduct,
 };

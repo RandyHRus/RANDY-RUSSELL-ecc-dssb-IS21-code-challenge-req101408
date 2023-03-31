@@ -38,12 +38,11 @@ function getAllProducts() {
     return Object.entries(inMemoryDataDict).map(([key, value]) => value);
 }
 /**
- * Adds new product into memory and storage (JSON file)
- * @param {Product} product
- * @returns {Product} product
- * @throws {Error} if product is invalid
+ * Verify if product has correct signatures
+ * @param none
+ * @returns {object|null} error object if it contains error, null otherwise
  */
-function postProduct(product) {
+function verifyProduct(product) {
     function isValidString(str) {
         return typeof str === "string" && str.trim().length > 0;
     }
@@ -101,13 +100,27 @@ function postProduct(product) {
         oProductError.methodology = "Invalid methodology";
         bProductContainsError = true;
     }
-    // Product is invalid, do not create new product.
     if (bProductContainsError) {
+        return oProductError;
+    }
+    else {
+        return null;
+    }
+}
+/**
+ * Adds new product into memory and storage (JSON file)
+ * @param {Product} product
+ * @returns {Product} product
+ * @throws {Error} if product is invalid
+ */
+function postProduct(product) {
+    let oProductError = verifyProduct(product);
+    if (oProductError != null) {
         console.log("Invalid product");
         throw new Error(JSON.stringify(oProductError));
     }
     try {
-        let newProductId = generateNewID();
+        let newProductId = product.productId != -1 ? product.productId : generateNewID();
         let newProduct = {
             productId: newProductId,
             productName: product.productName,
@@ -127,6 +140,31 @@ function postProduct(product) {
     }
 }
 /**
+ * Edits one product
+ * @param {number} productId
+ * @returns {Product} the edited product
+ */
+function putProduct(product) {
+    let oProductError = verifyProduct(product);
+    if (oProductError != null) {
+        console.log("Invalid product");
+        throw new Error(JSON.stringify(oProductError));
+    }
+    inMemoryDataDict[product.productId];
+    let newProduct = {
+        productId: product.productId,
+        productName: product.productName,
+        productOwnerName: product.productOwnerName,
+        developers: product.developers,
+        scrumMasterName: product.scrumMasterName,
+        startDate: product.startDate,
+        methodology: product.methodology,
+    };
+    inMemoryDataDict[product.productId] = newProduct;
+    fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
+    return newProduct;
+}
+/**
  * Retrieves one product
  * @param {number} productId
  * @returns {Product} product
@@ -139,12 +177,20 @@ function getProduct(productId) {
  * @returns {number} int
  */
 function generateNewID() {
-    //TODO: come up with better way to generate this
-    return Math.ceil(Math.random() * 100000000);
+    let maxId = -Infinity;
+    console.log(maxId);
+    for (let [id, value] of Object.entries(inMemoryDataDict)) {
+        console.log(value.productId);
+        if (value.productId > maxId)
+            maxId = value.productId;
+    }
+    console.log(maxId);
+    return maxId + 1;
 }
 module.exports = {
     loadProductsFromFile: loadProductsFromFile,
     getAllProducts: getAllProducts,
     getProduct: getProduct,
     postProduct: postProduct,
+    putProduct: putProduct,
 };

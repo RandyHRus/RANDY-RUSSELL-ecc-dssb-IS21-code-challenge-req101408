@@ -21,7 +21,10 @@ interface Column {
 
 const rowsPerPage = 10;
 
-export default function ProductsTable(props: { products: Product[] }) {
+export default function ProductsTable(props: {
+    products: Product[];
+    handleEditDialogOpen: (product: Product) => void;
+}) {
     const [page, setPage] = useState<number>(0);
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -38,7 +41,7 @@ export default function ProductsTable(props: { products: Product[] }) {
         {
             id: "productName",
             label: "Product name",
-            width: "30%",
+            width: "15%",
             align: "right",
         },
         {
@@ -56,7 +59,7 @@ export default function ProductsTable(props: { products: Product[] }) {
         {
             id: "developers",
             label: "Developers",
-            width: "15%",
+            width: "25%",
             align: "right",
         },
         { id: "startDate", label: "Start date", width: "10%", align: "right" },
@@ -66,11 +69,17 @@ export default function ProductsTable(props: { products: Product[] }) {
             width: "10%",
             align: "right",
         },
+        {
+            id: "edit",
+            label: "",
+            width: "5%",
+            align: "right",
+        },
     ];
 
     return (
         <Paper sx={{ overflow: "hidden" }}>
-            <TableContainer sx={{ height: "50vh" }}>
+            <TableContainer sx={{ height: "80vh", width: "70vw" }}>
                 <Table stickyHeader aria-label="sticky table" size="small">
                     <TableHead>
                         <TableRow>
@@ -106,13 +115,23 @@ export default function ProductsTable(props: { products: Product[] }) {
                                         {p.productOwnerName}
                                     </TableCell>
                                     <TableCell align="right">
-                                        {p.developers}
+                                        {p.developers.join(", ")}
                                     </TableCell>
                                     <TableCell align="right">
                                         {p.startDate}
                                     </TableCell>
                                     <TableCell align="right">
                                         {p.methodology}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => {
+                                                props.handleEditDialogOpen(p);
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

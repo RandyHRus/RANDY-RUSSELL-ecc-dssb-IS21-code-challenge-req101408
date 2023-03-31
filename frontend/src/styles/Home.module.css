@@ -7,18 +7,20 @@
 
 .menu-bar-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   padding: 10px;
-  background-color: grey;
-  width: 80%;
+  width: 70vw;
 }
 
 .products-table-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: red;
   padding: 10px;
   width: 80%;
+}
+
+.menu-bar-item {
+  margin-left: 10px;
 }

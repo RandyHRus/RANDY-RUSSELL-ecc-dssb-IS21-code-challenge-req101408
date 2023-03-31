@@ -45,6 +45,41 @@ export function createProduct(product: Product): Promise<Product | object> {
     });
 }
 
+export function updateProduct(product: Product): Promise<Product | object> {
+    return new Promise((resolve, reject) => {
+        let responseType: string;
+        fetch(apiURL + "/product", {
+            method: "PUT",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    responseType = "error";
+                } else {
+                    responseType = "product";
+                }
+                return response.json();
+            })
+            .then((json) => {
+                if (responseType == "product") {
+                    console.log("successfully edit product");
+                    return resolve(json);
+                } else {
+                    console.log("Failed to edit product");
+                    return reject(json);
+                }
+            })
+            .catch((error) => {
+                console.log("Failed to edit product");
+                return reject(error);
+            });
+    });
+}
+
 export function readProducts(): Promise<Product[]> {
     return new Promise((resolve, reject) => {
         fetch(apiURL + "/products")
