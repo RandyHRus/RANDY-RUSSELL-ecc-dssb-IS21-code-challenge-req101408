@@ -29,6 +29,7 @@ Backend
 - Backend was built using Node.js with Express.js
 - The products data is stored in productsData.json. 
 - REST API is used to get/create/update/delete products from productsData.json.
+- The API includes a healthcheck end point at localhost:3000/api/healthcheck
 - For more information on the API, swagger API document can be found on localhost:3000/api/api-docs
 
 Frontend
