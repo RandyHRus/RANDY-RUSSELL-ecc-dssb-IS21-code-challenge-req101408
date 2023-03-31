@@ -21,3 +21,6 @@ npm run dev
 ```
 The app will start on port 3001, or the next available port.
 Navigate to localhost:3001 to access the app.
+
+# Available features
+All requested features are implemented.
