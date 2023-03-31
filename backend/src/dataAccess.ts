@@ -34,6 +34,7 @@ function loadProductsFromFile() {
         console.error(
             "something went wrong reading data file. Make sure data follows correct syntax."
         );
+        throw e;
     }
 }
 
@@ -209,6 +210,10 @@ function putProduct(product: Product) {
  * @returns void
  */
 function deleteProduct(productId: number) {
+    if (!inMemoryDataDict[productId]) {
+        throw new Error("No product with that ID");
+    }
+
     delete inMemoryDataDict[productId];
     fs.writeFileSync(
         dataFilePath,
@@ -222,7 +227,11 @@ function deleteProduct(productId: number) {
  * @returns {Product} product
  */
 function getProduct(productId: number) {
-    return inMemoryDataDict[productId];
+    if (inMemoryDataDict[productId]) {
+        return inMemoryDataDict[productId];
+    } else {
+        throw new Error("No product with that ID");
+    }
 }
 
 /**

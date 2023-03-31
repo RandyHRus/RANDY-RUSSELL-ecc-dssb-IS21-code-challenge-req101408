@@ -19,6 +19,9 @@ import { createProduct } from "@/apiAccess";
 
 /**
  * Pop up dialog form used to create a product
+ * @param {boolean} open, whether the form should be displayed or hidden
+ * @param {function} handleClose, callBack function to run when finished with form
+ * @param {function} displayError, callBack function to run when we want to display an error
  */
 export default function AddProductDialog(props: {
     open: boolean;
@@ -64,7 +67,6 @@ export default function AddProductDialog(props: {
         event: SelectChangeEvent,
         setFunction: (value: string) => void
     ) {
-        console.log(event.target.value as string);
         setFunction(event.target.value as string);
     }
 

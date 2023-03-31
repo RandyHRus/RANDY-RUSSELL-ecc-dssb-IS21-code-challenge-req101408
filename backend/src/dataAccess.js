@@ -27,6 +27,7 @@ function loadProductsFromFile() {
     catch (e) {
         console.error(e);
         console.error("something went wrong reading data file. Make sure data follows correct syntax.");
+        throw e;
     }
 }
 /**
@@ -170,6 +171,9 @@ function putProduct(product) {
  * @returns void
  */
 function deleteProduct(productId) {
+    if (!inMemoryDataDict[productId]) {
+        throw new Error("No product with that ID");
+    }
     delete inMemoryDataDict[productId];
     fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
 }
@@ -179,7 +183,12 @@ function deleteProduct(productId) {
  * @returns {Product} product
  */
 function getProduct(productId) {
-    return inMemoryDataDict[productId];
+    if (inMemoryDataDict[productId]) {
+        return inMemoryDataDict[productId];
+    }
+    else {
+        throw new Error("No product with that ID");
+    }
 }
 /**
  * Generates new ID that does not conflict with existing ones

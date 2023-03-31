@@ -6,21 +6,11 @@ const swaggerUI = require("swagger-ui-express");
 const swaggerJSDoc = require("swagger-jsdoc");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const swaggerOptions = {
-    definition: {
-        openapi: "3.0.0",
-        info: {
-            title: "Product management API",
-            version: "1.0.0",
-        },
-    },
-    apis: ["./src/routes*.js"], // files containing annotations as above
-};
-const swaggerSpecs = swaggerJSDoc(swaggerOptions);
+const swaggerDocs = require("./swagger.json");
 const apiRouter = express.Router();
 apiRouter.use(bodyParser.json()); //parse request body
 apiRouter.use(cors()); // enable cross-origin requests
-apiRouter.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+apiRouter.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 // middleware to load data into memory.
 apiRouter.use((req, res, next) => {
     console.log("loading products into memory");
@@ -34,14 +24,13 @@ apiRouter.use((req, res, next) => {
     console.log("body: " + JSON.stringify(req.body));
     next();
 });
-// Get all products
 apiRouter.get("/products", (req, res) => {
     try {
         let products = dataAccess.getAllProducts();
         res.status(200).send(products);
     }
     catch (error) {
-        res.status(400).send(JSON.parse(error.message));
+        res.status(400).send({ error: error.message });
     }
 });
 // Get one product using productId
@@ -51,7 +40,7 @@ apiRouter.get("/product/:productId", (req, res) => {
         res.status(200).send(product);
     }
     catch (error) {
-        res.status(400).send(error);
+        res.status(400).send({ error: error.message });
     }
 });
 // Post one new product
@@ -61,7 +50,13 @@ apiRouter.post("/product", (req, res) => {
         res.status(200).send(product);
     }
     catch (error) {
-        res.status(400).send(JSON.parse(error.message));
+        try {
+            let parse = JSON.parse(error.message);
+            res.status(400).send(parse);
+        }
+        catch (error2) {
+            res.status(400).send({ error: error.message });
+        }
     }
 });
 // Put one product
@@ -71,7 +66,13 @@ apiRouter.put("/product", (req, res) => {
         res.status(200).send(product);
     }
     catch (error) {
-        res.status(400).send(JSON.parse(error.message));
+        try {
+            let parse = JSON.parse(error.message);
+            res.status(400).send(parse);
+        }
+        catch (error2) {
+            res.status(400).send({ error: error.message });
+        }
     }
 });
 // Delete one product using productId
@@ -81,7 +82,7 @@ apiRouter.delete("/product/:productId", (req, res) => {
         res.status(200).send(req.params.productId);
     }
     catch (error) {
-        res.status(400).send(JSON.parse(error.message));
+        res.status(400).send({ error: error.message });
     }
 });
 module.exports = apiRouter;

@@ -1,0 +1,280 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Product management API",
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "required": [
+          "productId",
+          "productName",
+          "productOwnerName",
+          "developers",
+          "startDate",
+          "scrumMasterName",
+          "methodology"
+        ],
+        "properties": {
+          "productId": {
+            "type": "number",
+            "description": "you can pass in id, or set as -1 to auto"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productOwnerName": {
+            "type": "string"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "max length 5"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "scrumMasterName": {
+            "type": "string"
+          },
+          "methodology": {
+            "type": "string",
+            "description": "agile, or waterfall"
+          }
+        }
+      },
+      "ProductError": {
+        "type": "object",
+        "required": [
+          "mainMsg",
+          "productId",
+          "productName",
+          "productOwnerName",
+          "developers",
+          "startDate",
+          "scrumMasterName",
+          "methodology"
+        ],
+        "properties": {
+          "mainMsg": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productOwnerName": {
+            "type": "string"
+          },
+          "developers": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "scrumMasterName": {
+            "type": "string"
+          },
+          "methodology": {
+            "type": "string"
+          }
+        }
+      },
+      "GenericError": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/products": {
+      "get": {
+        "summary": "Returns a list of products.",
+        "responses": {
+          "200": {
+            "description": "A list of products.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to read data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product/{productId}": {
+      "get": {
+        "summary": "Returns a product using product ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "no product with requested id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a product using product ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "productId",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "the deleted product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "no product with requested id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenericError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/product": {
+      "post": {
+        "summary": "Creates a new product",
+        "requestBody": {
+          "description": "Product to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resulting created product.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid syntax. Returns an object with an error message for corresponding fields where an error exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates a product",
+        "requestBody": {
+          "description": "Product to be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resulting updated product.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid syntax. Returns an object with an error message for corresponding fields where an error exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
