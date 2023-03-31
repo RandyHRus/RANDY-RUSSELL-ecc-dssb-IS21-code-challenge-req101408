@@ -24,6 +24,9 @@ apiRouter.use((req, res, next) => {
     console.log("body: " + JSON.stringify(req.body));
     next();
 });
+apiRouter.get("/healthcheck", (req, res) => {
+    res.status(200).send("healthy");
+});
 apiRouter.get("/products", (req, res) => {
     try {
         let products = dataAccess.getAllProducts();

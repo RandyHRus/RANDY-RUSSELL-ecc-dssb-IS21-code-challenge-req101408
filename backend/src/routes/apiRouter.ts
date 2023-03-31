@@ -29,6 +29,10 @@ apiRouter.use((req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
+apiRouter.get("/healthcheck", (req: Request, res: Response) => {
+    res.status(200).send("healthy");
+});
+
 apiRouter.get("/products", (req: Request, res: Response) => {
     try {
         let products = dataAccess.getAllProducts();
