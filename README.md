@@ -57,6 +57,6 @@ All requested features are implemented.
 - On top of the screen, there exists a search field labeled "Search scrum master"
 - When you type in a name, the displayed products will be filtered to only those assigned to that scrum master
 
-User story 5
+### User story 5
 - On top of the screen, there exists a search field labeled "Search developer"
 - When you type in a name, the displayed products will be filtered to only those worked on by that developer
