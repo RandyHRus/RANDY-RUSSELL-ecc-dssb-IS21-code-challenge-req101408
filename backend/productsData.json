@@ -1,84 +1,12 @@
 [
   {
-    "productId": 1,
-    "productName": "Fun web app",
-    "productOwnerName": "Fatima Patel",
-    "developers": [
-      "Amara Nguyen",
-      "Ayaan Kim",
-      "Carmen Lee",
-      "Fatima Kim",
-      "Jamal Wong"
-    ],
-    "scrumMasterName": "Nabil Johnson",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 2,
-    "productName": "Useful web app",
-    "productOwnerName": "Jamal Lee",
-    "developers": [
-      "Fatima Patel",
-      "Fatima Martinez",
-      "Sofia Kim",
-      "Amara Wong",
-      "Kai Kim"
-    ],
-    "scrumMasterName": "Yara Patel",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 3,
-    "productName": "Fun app",
-    "productOwnerName": "Kai Martinez",
-    "developers": [
-      "Dante Lee",
-      "Fatima Johnson",
-      "Dante Martinez"
-    ],
-    "scrumMasterName": "Ayaan Johnson",
-    "startDate": "2023/03/25",
-    "methodology": "agile"
-  },
-  {
-    "productId": 4,
-    "productName": "Useful app",
-    "productOwnerName": "Amara Patel",
-    "developers": [
-      "Carmen Martinez",
-      "Jamal Nguyen",
-      "Sofia Martinez",
-      "Jamal Lee"
-    ],
-    "scrumMasterName": "Sofia Singh",
-    "startDate": "2023/03/25",
-    "methodology": "agile"
-  },
-  {
-    "productId": 5,
-    "productName": "Useful web app",
-    "productOwnerName": "Amara Johnson",
-    "developers": [
-      "Sofia Martinez",
-      "Fatima Martinez",
-      "Jamal Johnson",
-      "Carmen Rodriguez",
-      "Amara Nguyen"
-    ],
-    "scrumMasterName": "Dante Johnson",
-    "startDate": "2023/03/25",
-    "methodology": "agile"
-  },
-  {
     "productId": 6,
-    "productName": "Fun app",
+    "productName": "a",
     "productOwnerName": "Fatima Lee",
     "developers": [
       "Kai Nguyen",
-      "Ayaan Martinez",
-      "Fatima Johnson"
+      "  Ayaan Martinez",
+      "  Fatima Johnson"
     ],
     "scrumMasterName": "Fatima Martinez",
     "startDate": "2023/03/25",
@@ -120,60 +48,6 @@
     "methodology": "waterfall"
   },
   {
-    "productId": 10,
-    "productName": "Useful web service",
-    "productOwnerName": "Ayaan Singh",
-    "developers": [
-      "Dante Nguyen",
-      "Kai Gomez"
-    ],
-    "scrumMasterName": "Yara Patel",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 11,
-    "productName": "Useful web app",
-    "productOwnerName": "Fatima Johnson",
-    "developers": [
-      "Ayaan Wong",
-      "Kai Johnson",
-      "Yara Johnson",
-      "Kai Rodriguez"
-    ],
-    "scrumMasterName": "Dante Wong",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 12,
-    "productName": "Useful web app",
-    "productOwnerName": "Fatima Martinez",
-    "developers": [
-      "Nabil Singh",
-      "Jamal Patel",
-      "Yara Patel",
-      "Yara Rodriguez",
-      "Sofia Rodriguez"
-    ],
-    "scrumMasterName": "Kai Kim",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 13,
-    "productName": "Fun web app",
-    "productOwnerName": "Fatima Patel",
-    "developers": [
-      "Fatima Johnson",
-      "Kai Kim",
-      "Jamal Martinez"
-    ],
-    "scrumMasterName": "Amara Johnson",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
     "productId": 14,
     "productName": "Cool app",
     "productOwnerName": "Fatima Rodriguez",
@@ -187,56 +61,14 @@
     "methodology": "waterfall"
   },
   {
-    "productId": 15,
-    "productName": "Fun web app",
-    "productOwnerName": "Carmen Patel",
-    "developers": [
-      "Ayaan Singh",
-      "Kai Rodriguez",
-      "Nabil Patel",
-      "Amara Wong",
-      "Sofia Johnson"
-    ],
-    "scrumMasterName": "Yara Martinez",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 16,
-    "productName": "Useful web service",
-    "productOwnerName": "Ayaan Singh",
-    "developers": [
-      "Fatima Nguyen",
-      "Fatima Singh",
-      "Carmen Nguyen",
-      "Kai Singh",
-      "Amara Johnson"
-    ],
-    "scrumMasterName": "Sofia Rodriguez",
-    "startDate": "2023/03/25",
-    "methodology": "agile"
-  },
-  {
-    "productId": 17,
-    "productName": "Useful web app",
-    "productOwnerName": "Dante Gomez",
-    "developers": [
-      "Fatima Lee",
-      "Sofia Lee"
-    ],
-    "scrumMasterName": "Fatima Gomez",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
     "productId": 18,
     "productName": "Fun app",
     "productOwnerName": "Dante Martinez",
     "developers": [
       "Carmen Kim",
-      "Ayaan Patel",
-      "Fatima Nguyen",
-      "Kai Wong"
+      " Ayaan Patel",
+      " Fatima Nguyen",
+      " Kai Wong"
     ],
     "scrumMasterName": "Nabil Singh",
     "startDate": "2023/03/25",
@@ -254,30 +86,6 @@
       "Carmen Nguyen"
     ],
     "scrumMasterName": "Nabil Martinez",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 20,
-    "productName": "Cool web app",
-    "productOwnerName": "Jamal Singh",
-    "developers": [
-      "Amara Rodriguez",
-      "Kai Rodriguez"
-    ],
-    "scrumMasterName": "Amara Lee",
-    "startDate": "2023/03/25",
-    "methodology": "waterfall"
-  },
-  {
-    "productId": 21,
-    "productName": "Useful app",
-    "productOwnerName": "Sofia Lee",
-    "developers": [
-      "Dante Kim",
-      "Nabil Martinez"
-    ],
-    "scrumMasterName": "Carmen Patel",
     "startDate": "2023/03/25",
     "methodology": "waterfall"
   },
@@ -533,6 +341,28 @@
     ],
     "scrumMasterName": "e2",
     "startDate": "2000-03-31",
+    "methodology": "agile"
+  },
+  {
+    "productId": 10002,
+    "productName": "a",
+    "productOwnerName": "a",
+    "developers": [
+      "a"
+    ],
+    "scrumMasterName": "a",
+    "startDate": "1999-02-03",
+    "methodology": "agile"
+  },
+  {
+    "productId": 10003,
+    "productName": "ee",
+    "productOwnerName": "a",
+    "developers": [
+      "a"
+    ],
+    "scrumMasterName": "a",
+    "startDate": "2000-01-01",
     "methodology": "agile"
   }
 ]

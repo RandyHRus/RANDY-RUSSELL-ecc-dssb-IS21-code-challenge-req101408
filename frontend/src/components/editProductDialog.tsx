@@ -15,12 +15,19 @@ import {
 } from "@mui/material";
 import styles from "@/styles/Home.module.css";
 import Product from "@/product";
-import { createProduct, updateProduct } from "@/apiAccess";
-import { displayError } from "./errorDisplay";
+import { createProduct, deleteProduct, updateProduct } from "@/apiAccess";
 
+/**
+ * Pop up dialog form used to edit a product
+ * @param {boolean} open, whether the form should be displayed or hidden
+ * @param {Product|null} product, the product used to pre-fill form
+ * @param {function} displayError, callBack function to run when we want to display an error
+ * @param {function} handleClose, callBack function to run when finished with form
+ */
 export default function EditProductDialog(props: {
     open: boolean;
     product: Product | null;
+    displayError: (errorMsg: string) => void;
     handleClose: () => void;
 }) {
     const [productName, setProductName] = useState<string>("");
@@ -35,6 +42,7 @@ export default function EditProductDialog(props: {
     const [developersErr, setDevelopersErr] = useState<string>("");
     const [methodologyErr, setMethodologyErr] = useState<string>("");
 
+    //Reset all fields
     function reset() {
         setProductName("");
         setScrumMasterName("");
@@ -65,6 +73,10 @@ export default function EditProductDialog(props: {
         }
     }, [props.product]);
 
+    /**
+     * @param {SelectChangeEvent} event, corresponding event on field change
+     * @param {function} setFunction, setState that will be run on field change
+     */
     function handleFieldChange(
         event: SelectChangeEvent,
         setFunction: (value: string) => void
@@ -84,22 +96,41 @@ export default function EditProductDialog(props: {
         };
         updateProduct(productRequest) //TODO
             .then((productResult) => {
-                props.handleClose();
                 reset();
+                props.handleClose();
             })
-            .catch((error) => {
-                displayError(error.mainMsg);
-                setProductNameErr(error.productName);
-                setScrumMasterErr(error.scrumMasterName);
-                setProductOwnerErr(error.productOwnerName);
-                setDevelopersErr(error.developers);
-                setMethodologyErr(error.methodology);
+            .catch((error: Error) => {
+                try {
+                    let parse = JSON.parse(error.message);
+                    props.displayError(parse.mainMsg);
+                    setProductNameErr(parse.productName);
+                    setScrumMasterErr(parse.scrumMasterName);
+                    setProductOwnerErr(parse.productOwnerName);
+                    setDevelopersErr(parse.developers);
+                    setMethodologyErr(parse.methodology);
+                } catch (error2) {
+                    props.displayError(error.message);
+                }
             });
     }
 
     function handleCancel(): void {
         reset();
         props.handleClose();
+    }
+
+    function handleDelete(): void {
+        if (props.product != null) {
+            deleteProduct(props.product)
+                .then(() => {
+                    console.log("successfully deleted product");
+                    reset();
+                    props.handleClose();
+                })
+                .catch((error) => {
+                    props.displayError(JSON.stringify(error));
+                });
+        }
     }
 
     return (
@@ -110,7 +141,7 @@ export default function EditProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="productName"
+                    id="edit_dialog_productName"
                     label="Product name"
                     type="text"
                     fullWidth
@@ -125,7 +156,7 @@ export default function EditProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="scrumMaster"
+                    id="edit_dialog_scrumMaster"
                     label="Scrum master"
                     type="text"
                     fullWidth
@@ -140,7 +171,7 @@ export default function EditProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="productOwner"
+                    id="edit_dialog_productOwner"
                     label="Product owner"
                     type="text"
                     fullWidth
@@ -155,7 +186,7 @@ export default function EditProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="developers"
+                    id="edit_dialog_developers"
                     label="developers (separate by comma)"
                     type="text"
                     fullWidth
@@ -171,7 +202,7 @@ export default function EditProductDialog(props: {
                     <InputLabel>{"Methodology"}</InputLabel>
                     <Select
                         labelId="methodology"
-                        id="methodology"
+                        id="edit_dialog_methodology"
                         value={methodology}
                         label="Methodology"
                         variant="standard"
@@ -187,6 +218,7 @@ export default function EditProductDialog(props: {
                 </FormControl>
             </DialogContent>
             <DialogActions>
+                <Button onClick={handleDelete}>Delete</Button>
                 <Button onClick={handleCancel}>Cancel</Button>
                 <Button onClick={handleSubmit}>Save</Button>
             </DialogActions>

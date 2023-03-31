@@ -57,7 +57,7 @@ function verifyProduct(product: Product) {
     }
 
     let oProductError: ProductError = {
-        mainMsg: "",
+        mainMsg: "Error in one of fields",
         productName: "",
         productOwnerName: "",
         developers: "",
@@ -204,6 +204,19 @@ function putProduct(product: Product) {
 }
 
 /**
+ * Deletes one product
+ * @param {number} productId
+ * @returns void
+ */
+function deleteProduct(productId: number) {
+    delete inMemoryDataDict[productId];
+    fs.writeFileSync(
+        dataFilePath,
+        JSON.stringify(Object.values(inMemoryDataDict), null, 2)
+    );
+}
+
+/**
  * Retrieves one product
  * @param {number} productId
  * @returns {Product} product
@@ -230,4 +243,5 @@ module.exports = {
     getProduct: getProduct,
     postProduct: postProduct,
     putProduct: putProduct,
+    deleteProduct: deleteProduct,
 };

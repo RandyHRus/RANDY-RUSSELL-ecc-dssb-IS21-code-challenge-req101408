@@ -1,12 +1,11 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, Snackbar, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProductsTable from "../components/productsTable";
 import Product from "../product";
 import AddProductDialog from "@/components/addProductDialog";
 import { readProducts } from "../apiAccess";
-import { displayError } from "@/components/errorDisplay";
 import EditProductDialog from "@/components/editProductDialog";
 
 const DIALOG_IDS = {
@@ -15,11 +14,16 @@ const DIALOG_IDS = {
 };
 
 export default function Home() {
+    //All products found in the app.
     const [products, setProducts] = useState<Product[]>([]);
+    //Filtered products after search, these will be the ones being displayed on to the page.
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+
     const [dialogOpen, setDialogOpen] = React.useState(-1);
-    const [selectedProduct, setSelectedProduct] =
-        React.useState<Product | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+        null
+    );
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     const [searchScrumMasterFilter, setSearchScrumMasterFilter] =
         useState<string>("");
@@ -53,11 +57,16 @@ export default function Home() {
             .then((products: Product[]) => {
                 setProducts(products);
             })
-            .catch((err: string) => {
-                displayError(err);
+            .catch((err: Error) => {
+                setErrorMsg(err.message);
             });
     }
 
+    function handleErrorClose() {
+        setErrorMsg("");
+    }
+
+    // Updates filteredProducts based to search fields.
     useEffect(() => {
         function applyDeveloperFilter(products: Product[]): Product[] {
             return products.filter((p) => {
@@ -89,6 +98,7 @@ export default function Home() {
         setFilteredProducts(ps);
     }, [searchDeveloperFilter, searchScrumMasterFilter, products]);
 
+    // Fetch products on mount.
     useEffect(() => {
         refreshProducts();
     }, []);
@@ -149,13 +159,22 @@ export default function Home() {
                 </div>
                 <AddProductDialog
                     open={dialogOpen == DIALOG_IDS.addProductDialog}
+                    displayError={setErrorMsg}
                     handleClose={handleDialogClose}
                 />
                 <EditProductDialog
                     open={dialogOpen == DIALOG_IDS.editProductDialog}
                     product={selectedProduct}
+                    displayError={setErrorMsg}
                     handleClose={handleDialogClose}
                 />
+                <Snackbar
+                    open={errorMsg != ""}
+                    autoHideDuration={3000}
+                    onClose={handleErrorClose}
+                >
+                    <Alert severity="error">{errorMsg}</Alert>
+                </Snackbar>
             </main>
         </>
     );

@@ -47,7 +47,7 @@ function verifyProduct(product) {
         return typeof str === "string" && str.trim().length > 0;
     }
     let oProductError = {
-        mainMsg: "",
+        mainMsg: "Error in one of fields",
         productName: "",
         productOwnerName: "",
         developers: "",
@@ -165,6 +165,15 @@ function putProduct(product) {
     return newProduct;
 }
 /**
+ * Deletes one product
+ * @param {number} productId
+ * @returns void
+ */
+function deleteProduct(productId) {
+    delete inMemoryDataDict[productId];
+    fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
+}
+/**
  * Retrieves one product
  * @param {number} productId
  * @returns {Product} product
@@ -178,13 +187,10 @@ function getProduct(productId) {
  */
 function generateNewID() {
     let maxId = -Infinity;
-    console.log(maxId);
     for (let [id, value] of Object.entries(inMemoryDataDict)) {
-        console.log(value.productId);
         if (value.productId > maxId)
             maxId = value.productId;
     }
-    console.log(maxId);
     return maxId + 1;
 }
 module.exports = {
@@ -193,4 +199,5 @@ module.exports = {
     getProduct: getProduct,
     postProduct: postProduct,
     putProduct: putProduct,
+    deleteProduct: deleteProduct,
 };

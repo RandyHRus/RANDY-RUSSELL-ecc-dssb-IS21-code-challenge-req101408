@@ -21,6 +21,11 @@ interface Column {
 
 const rowsPerPage = 10;
 
+/**
+ * Table that displays a list of products
+ * @param {Product[]} products, list of products to be displayed
+ * @param {function} handleEditDialogOpen callBack function to run when an edit button is clicked.
+ */
 export default function ProductsTable(props: {
     products: Product[];
     handleEditDialogOpen: (product: Product) => void;

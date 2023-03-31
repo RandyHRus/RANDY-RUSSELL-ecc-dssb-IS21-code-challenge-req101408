@@ -16,11 +16,14 @@ import {
 import styles from "@/styles/Home.module.css";
 import Product from "@/product";
 import { createProduct } from "@/apiAccess";
-import { displayError } from "./errorDisplay";
 
+/**
+ * Pop up dialog form used to create a product
+ */
 export default function AddProductDialog(props: {
     open: boolean;
     handleClose: () => void;
+    displayError: (errorMsg: string) => void;
 }) {
     const [productName, setProductName] = useState<string>("");
     const [scrumMasterName, setScrumMasterName] = useState<string>("");
@@ -36,6 +39,7 @@ export default function AddProductDialog(props: {
     const [startDateErr, setStartDateErr] = useState<string>("");
     const [methodologyErr, setMethodologyErr] = useState<string>("");
 
+    // Reset all fields
     function reset() {
         setProductName("");
         setScrumMasterName("");
@@ -52,6 +56,10 @@ export default function AddProductDialog(props: {
         setMethodologyErr("");
     }
 
+    /**
+     * @param {SelectChangeEvent} event, corresponding event on field change
+     * @param {function} setFunction, setState that will be run on field change
+     */
     function handleFieldChange(
         event: SelectChangeEvent,
         setFunction: (value: string) => void
@@ -72,17 +80,22 @@ export default function AddProductDialog(props: {
         };
         createProduct(productRequest)
             .then((productResult) => {
-                props.handleClose();
                 reset();
+                props.handleClose();
             })
-            .catch((error) => {
-                displayError(error.mainMsg);
-                setProductNameErr(error.productName);
-                setScrumMasterErr(error.scrumMasterName);
-                setProductOwnerErr(error.productOwnerName);
-                setDevelopersErr(error.developers);
-                setStartDateErr(error.startDate);
-                setMethodologyErr(error.methodology);
+            .catch((error: Error) => {
+                try {
+                    let parse = JSON.parse(error.message);
+                    props.displayError(parse.mainMsg);
+                    setProductNameErr(parse.productName);
+                    setScrumMasterErr(parse.scrumMasterName);
+                    setProductOwnerErr(parse.productOwnerName);
+                    setDevelopersErr(parse.developers);
+                    setStartDateErr(parse.startDate);
+                    setMethodologyErr(parse.methodology);
+                } catch (error2) {
+                    props.displayError(error.message);
+                }
             });
     }
 
@@ -99,7 +112,7 @@ export default function AddProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="productName"
+                    id="add_dialog_product_name"
                     label="Product name"
                     type="text"
                     fullWidth
@@ -113,7 +126,7 @@ export default function AddProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="scrumMaster"
+                    id="add_dialog_scrumMaster"
                     label="Scrum master"
                     type="text"
                     fullWidth
@@ -127,7 +140,7 @@ export default function AddProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="productOwner"
+                    id="add_dialog_productOwner"
                     label="Product owner"
                     type="text"
                     fullWidth
@@ -141,7 +154,7 @@ export default function AddProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="developers"
+                    id="add_dialog_developers"
                     label="developers (separate by comma)"
                     type="text"
                     fullWidth
@@ -155,7 +168,7 @@ export default function AddProductDialog(props: {
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="startDate"
+                    id="add_dialog_startDate"
                     type="date"
                     fullWidth
                     error={startDateErr != ""}
@@ -169,7 +182,7 @@ export default function AddProductDialog(props: {
                     <InputLabel>{"Methodology"}</InputLabel>
                     <Select
                         labelId="methodology"
-                        id="methodology"
+                        id="add_dialog_methodology"
                         value={methodology}
                         label="Methodology"
                         variant="standard"

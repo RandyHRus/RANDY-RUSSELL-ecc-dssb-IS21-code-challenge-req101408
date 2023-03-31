@@ -35,16 +35,23 @@ export function createProduct(product: Product): Promise<Product | object> {
                     return resolve(json);
                 } else {
                     console.log("Failed to create product");
-                    return reject(json);
+                    return reject(new Error(JSON.stringify(json)));
                 }
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 console.log("Failed to create product");
                 return reject(error);
             });
     });
 }
 
+/**
+ * Send PUT request to edit product
+ * @param {Product} product
+ * @returns {Promise<Product | object>}
+ *      resulting product on success
+ *      error object on fail
+ */
 export function updateProduct(product: Product): Promise<Product | object> {
     return new Promise((resolve, reject) => {
         let responseType: string;
@@ -69,17 +76,21 @@ export function updateProduct(product: Product): Promise<Product | object> {
                     console.log("successfully edit product");
                     return resolve(json);
                 } else {
-                    console.log("Failed to edit product");
-                    return reject(json);
+                    console.log("Failed to edit product!!");
+                    return reject(new Error(JSON.stringify(json)));
                 }
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 console.log("Failed to edit product");
                 return reject(error);
             });
     });
 }
 
+/**
+ * Send GET request to retrieve all products
+ * @returns {Promise<Product[]>} promise with list of all products found
+ */
 export function readProducts(): Promise<Product[]> {
     return new Promise((resolve, reject) => {
         fetch(apiURL + "/products")
@@ -93,8 +104,35 @@ export function readProducts(): Promise<Product[]> {
                 console.log("retrieved products");
                 return resolve(products);
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 console.log("Failed to read products");
+                return reject(error);
+            });
+    });
+}
+
+/**
+ * Send GET request to retrieve all products
+ * @param {Product} product, the product to be deleted.
+ * @returns {Promise<void>}
+ */
+export function deleteProduct(product: Product): Promise<void> {
+    return new Promise((resolve, reject) => {
+        fetch(apiURL + `/product/${product.productId}`, {
+            method: "DELETE",
+            mode: "cors",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete product");
+                }
+                return resolve();
+            })
+            .catch((error: Error) => {
+                console.log("Failed to delete products");
                 return reject(error);
             });
     });
