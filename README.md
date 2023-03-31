@@ -12,7 +12,7 @@ npm run dev
 the app will start on port 3000.
 
 ## 2. Setup and run frontend
-Navigate to folder Randy-Russell-IS24-full-stack-competition-req97073/frontend and run these commands
+In a separate terminal, navigate to folder Randy-Russell-IS24-full-stack-competition-req97073/frontend and run these commands
 ```
 npm install
 ```
