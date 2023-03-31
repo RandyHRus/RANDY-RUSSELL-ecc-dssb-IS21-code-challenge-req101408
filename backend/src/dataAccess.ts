@@ -1,13 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import ProductError from "./productError";
+import Product from "./util/product";
+
 /**
  * Script for accessing data.
  */
+
 const fs = require("fs");
 const path = require("path");
-const inMemoryDataDict = {};
+
+const inMemoryDataDict: Record<number, Product> = {};
+
 const dataFilePath = path.join(__dirname, "..", "productsData.json");
+
 const MAX_DEVELOPERS = 5;
+
 /**
  * Function to retrieve data from file and load it into memory.
  * This function should be run before other functions.
@@ -19,17 +25,19 @@ function loadProductsFromFile() {
         let res = fs.readFileSync(dataFilePath);
         let data = JSON.parse(res);
         for (let i = 0; i < data.length; i++) {
-            let product = data[i];
-            let productId = product.productId;
+            let product: Product = data[i];
+            let productId: number = product.productId;
             inMemoryDataDict[productId] = product;
         }
-    }
-    catch (e) {
+    } catch (e) {
         console.error(e);
-        console.error("something went wrong reading data file. Make sure data follows correct syntax.");
+        console.error(
+            "something went wrong reading data file. Make sure data follows correct syntax."
+        );
         throw e;
     }
 }
+
 /**
  * Retrieves all products stored in memory.
  * @param none
@@ -38,16 +46,18 @@ function loadProductsFromFile() {
 function getAllProducts() {
     return Object.entries(inMemoryDataDict).map(([key, value]) => value);
 }
+
 /**
  * Verify if product has correct signatures
  * @param none
  * @returns {object|null} error object if it contains error, null otherwise
  */
-function verifyProduct(product) {
-    function isValidString(str) {
+function verifyProduct(product: Product) {
+    function isValidString(str: string) {
         return typeof str === "string" && str.trim().length > 0;
     }
-    let oProductError = {
+
+    let oProductError: ProductError = {
         mainMsg: "Error in one of fields",
         productName: "",
         productOwnerName: "",
@@ -56,19 +66,24 @@ function verifyProduct(product) {
         scrumMasterName: "",
         methodology: "",
     };
+
     if (!product) {
         oProductError.mainMsg = "Product cannot be empty.";
         throw new Error(JSON.stringify(oProductError));
     }
-    let bProductContainsError = false;
+
+    let bProductContainsError: boolean = false;
+
     if (!isValidString(product.productName)) {
         bProductContainsError = true;
         oProductError.productName = "Invalid product name";
     }
+
     if (!isValidString(product.productOwnerName)) {
         bProductContainsError = true;
         oProductError.productOwnerName = "Invalid product owner name";
     }
+
     if (Array.isArray(product.developers)) {
         if (product.developers.length > MAX_DEVELOPERS) {
             oProductError.developers =
@@ -83,46 +98,54 @@ function verifyProduct(product) {
                 break;
             }
         }
-    }
-    else {
+    } else {
         oProductError.developers = "Developers needs to be an array";
         bProductContainsError = true;
     }
+
     if (isNaN(Date.parse(product.startDate))) {
         oProductError.startDate = "Invalid start date";
         bProductContainsError = true;
     }
+
     if (!isValidString(product.scrumMasterName)) {
         oProductError.scrumMasterName = "Invalid scrum master name";
         bProductContainsError = true;
     }
-    if (!isValidString(product.methodology) ||
-        (product.methodology != "agile" && product.methodology != "waterfall")) {
+
+    if (
+        !isValidString(product.methodology) ||
+        (product.methodology != "agile" && product.methodology != "waterfall")
+    ) {
         oProductError.methodology = "Invalid methodology";
         bProductContainsError = true;
     }
+
     if (bProductContainsError) {
         return oProductError;
-    }
-    else {
+    } else {
         return null;
     }
 }
+
 /**
  * Adds new product into memory and storage (JSON file)
  * @param {Product} product
  * @returns {Product} product
  * @throws {Error} if product is invalid
  */
-function postProduct(product) {
+function postProduct(product: Product) {
     let oProductError = verifyProduct(product);
+
     if (oProductError != null) {
         console.log("Invalid product");
         throw new Error(JSON.stringify(oProductError));
     }
+
     try {
-        let newProductId = product.productId != -1 ? product.productId : generateNewID();
-        let newProduct = {
+        let newProductId =
+            product.productId != -1 ? product.productId : generateNewID();
+        let newProduct: Product = {
             productId: newProductId,
             productName: product.productName,
             productOwnerName: product.productOwnerName,
@@ -131,28 +154,37 @@ function postProduct(product) {
             startDate: product.startDate,
             methodology: product.methodology,
         };
+
         inMemoryDataDict[newProductId] = newProduct;
-        fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
+
+        fs.writeFileSync(
+            dataFilePath,
+            JSON.stringify(Object.values(inMemoryDataDict), null, 2)
+        );
+
         return newProduct;
-    }
-    catch (error) {
+    } catch (error) {
         console.log("could not create product");
         throw error;
     }
 }
+
 /**
  * Edits one product
  * @param {number} productId
  * @returns {Product} the edited product
  */
-function putProduct(product) {
+function putProduct(product: Product) {
     let oProductError = verifyProduct(product);
+
     if (oProductError != null) {
         console.log("Invalid product");
         throw new Error(JSON.stringify(oProductError));
     }
+
     inMemoryDataDict[product.productId];
-    let newProduct = {
+
+    let newProduct: Product = {
         productId: product.productId,
         productName: product.productName,
         productOwnerName: product.productOwnerName,
@@ -161,47 +193,59 @@ function putProduct(product) {
         startDate: product.startDate,
         methodology: product.methodology,
     };
+
     inMemoryDataDict[product.productId] = newProduct;
-    fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
+
+    fs.writeFileSync(
+        dataFilePath,
+        JSON.stringify(Object.values(inMemoryDataDict), null, 2)
+    );
+
     return newProduct;
 }
+
 /**
  * Deletes one product
  * @param {number} productId
  * @returns void
  */
-function deleteProduct(productId) {
+function deleteProduct(productId: number) {
     if (!inMemoryDataDict[productId]) {
         throw new Error("No product with that ID");
     }
+
     delete inMemoryDataDict[productId];
-    fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
+    fs.writeFileSync(
+        dataFilePath,
+        JSON.stringify(Object.values(inMemoryDataDict), null, 2)
+    );
 }
+
 /**
  * Retrieves one product
  * @param {number} productId
  * @returns {Product} product
  */
-function getProduct(productId) {
+function getProduct(productId: number) {
     if (inMemoryDataDict[productId]) {
         return inMemoryDataDict[productId];
-    }
-    else {
+    } else {
         throw new Error("No product with that ID");
     }
 }
+
 /**
  * Generates new ID that does not conflict with existing ones
  * @returns {number} int
  */
 function generateNewID() {
-    let maxId = -Infinity;
+    let maxId: number = -Infinity;
     for (let [id, value] of Object.entries(inMemoryDataDict)) {
-        if (value.productId > maxId)
-            maxId = value.productId;
+        if (value.productId > maxId) maxId = value.productId;
     }
     return maxId + 1;
 }
+
 module.exports = {
     loadProductsFromFile: loadProductsFromFile,
     getAllProducts: getAllProducts,
