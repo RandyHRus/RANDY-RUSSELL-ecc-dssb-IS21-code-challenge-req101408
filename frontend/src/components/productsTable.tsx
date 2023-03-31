@@ -9,7 +9,7 @@ import {
     Paper,
     TablePagination,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Product from "../product";
 
 interface Column {
@@ -35,6 +35,10 @@ export default function ProductsTable(props: {
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
+
+    useEffect(() => {
+        setPage(0);
+    }, [props.products.length]);
 
     const columns: readonly Column[] = [
         {
