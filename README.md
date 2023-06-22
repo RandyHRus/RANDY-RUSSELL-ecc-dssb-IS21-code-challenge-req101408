@@ -2,7 +2,7 @@
 
 ## 1. Setup and run backend. 
 
-Navigate to folder Randy-Russell-IS24-full-stack-competition-req97073/backend and run these commands
+Navigate to folder RANDY-RUSSELL-ecc-dssb-IS21-code-challenge-req101408/backend and run these commands
 ```
 npm install
 ```
