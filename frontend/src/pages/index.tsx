@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
-import { Alert, Button, Snackbar, TextField } from "@mui/material";
+import { Alert, Button, Snackbar, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProductsTable from "../components/productsTable";
 import Product from "../product";
@@ -65,6 +65,9 @@ export default function Home() {
             </Head>
             <main className={styles.main} style={{ minWidth: "1000px" }}>
                 <div className={styles["menu-bar-wrapper"]}>
+                    <Typography style={{ alignSelf: "left" }}>
+                        {products.length + " products in ECC"}
+                    </Typography>
                     <Button
                         variant="contained"
                         className={styles["menu-bar-item"]}
