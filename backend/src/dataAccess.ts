@@ -65,6 +65,7 @@ function verifyProduct(product: Product) {
         startDate: "",
         scrumMasterName: "",
         methodology: "",
+        location: "",
     };
 
     if (!product) {
@@ -121,6 +122,11 @@ function verifyProduct(product: Product) {
         bProductContainsError = true;
     }
 
+    if (!isValidString(product.location)) {
+        oProductError.location = "Invalid location";
+        bProductContainsError = true;
+    }
+
     if (bProductContainsError) {
         return oProductError;
     } else {
@@ -153,6 +159,7 @@ function postProduct(product: Product) {
             scrumMasterName: product.scrumMasterName,
             startDate: product.startDate,
             methodology: product.methodology,
+            location: product.location,
         };
 
         inMemoryDataDict[newProductId] = newProduct;
@@ -192,6 +199,7 @@ function putProduct(product: Product) {
         scrumMasterName: product.scrumMasterName,
         startDate: product.startDate,
         methodology: product.methodology,
+        location: product.location,
     };
 
     inMemoryDataDict[product.productId] = newProduct;

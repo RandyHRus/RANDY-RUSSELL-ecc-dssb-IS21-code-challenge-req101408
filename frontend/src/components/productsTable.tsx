@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Product from "../product";
+import styles from "@/styles/Home.module.css";
 
 interface Column {
     id: string;
@@ -44,13 +45,13 @@ export default function ProductsTable(props: {
         {
             id: "productId",
             label: "Product number (ID)",
-            width: "15%",
+            width: "10%",
             align: "left",
         },
         {
             id: "productName",
             label: "Product name",
-            width: "15%",
+            width: "10%",
             align: "right",
         },
         {
@@ -68,14 +69,20 @@ export default function ProductsTable(props: {
         {
             id: "developers",
             label: "Developers",
-            width: "25%",
+            width: "20%",
             align: "right",
         },
         { id: "startDate", label: "Start date", width: "10%", align: "right" },
         {
             id: "methodology",
             label: "Methodology",
-            width: "10%",
+            width: "5%",
+            align: "right",
+        },
+        {
+            id: "location",
+            label: "Location",
+            width: "15%",
             align: "right",
         },
         {
@@ -88,7 +95,7 @@ export default function ProductsTable(props: {
 
     return (
         <Paper sx={{ overflow: "hidden" }}>
-            <TableContainer sx={{ height: "80vh", width: "70vw" }}>
+            <TableContainer>
                 <Table stickyHeader aria-label="sticky table" size="small">
                     <TableHead>
                         <TableRow>
@@ -96,7 +103,11 @@ export default function ProductsTable(props: {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ width: column.width }}
+                                    style={{
+                                        whiteSpace: "normal",
+                                        wordBreak: "break-word",
+                                        width: column.width,
+                                    }}
                                 >
                                     {column.label}
                                 </TableCell>
@@ -131,6 +142,15 @@ export default function ProductsTable(props: {
                                     </TableCell>
                                     <TableCell align="right">
                                         {p.methodology}
+                                    </TableCell>
+                                    <TableCell
+                                        align="right"
+                                        style={{
+                                            whiteSpace: "normal",
+                                            wordBreak: "break-word",
+                                        }}
+                                    >
+                                        {p.location}
                                     </TableCell>
                                     <TableCell>
                                         <Button

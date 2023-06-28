@@ -35,12 +35,14 @@ export default function EditProductDialog(props: {
     const [productOwnerName, setProductOwnerName] = useState<string>("");
     const [developers, setDevelopers] = useState<string>("");
     const [methodology, setMethodology] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
 
     const [productNameErr, setProductNameErr] = useState<string>("");
     const [scrumMasterErr, setScrumMasterErr] = useState<string>("");
     const [productOwnerErr, setProductOwnerErr] = useState<string>("");
     const [developersErr, setDevelopersErr] = useState<string>("");
     const [methodologyErr, setMethodologyErr] = useState<string>("");
+    const [locationErr, setLocationErr] = useState<string>("");
 
     //Reset all fields
     function reset() {
@@ -49,12 +51,14 @@ export default function EditProductDialog(props: {
         setProductOwnerName("");
         setDevelopers("");
         setMethodology("");
+        setLocation("");
 
         setProductNameErr("");
         setScrumMasterErr("");
         setProductOwnerErr("");
         setDevelopersErr("");
         setMethodologyErr("");
+        setLocationErr("");
     }
 
     useEffect(() => {
@@ -64,12 +68,14 @@ export default function EditProductDialog(props: {
             setProductOwnerName("");
             setDevelopers("");
             setMethodology("");
+            setLocation("");
         } else {
             setProductName(props.product.productName);
             setScrumMasterName(props.product.scrumMasterName);
             setProductOwnerName(props.product.productOwnerName);
             setDevelopers(props.product.developers.join(", "));
             setMethodology(props.product.methodology);
+            setLocation(props.product.location);
         }
     }, [props.product]);
 
@@ -93,6 +99,7 @@ export default function EditProductDialog(props: {
             developers: developers.split(","),
             scrumMasterName,
             methodology,
+            location,
         };
         updateProduct(productRequest) //TODO
             .then((productResult) => {
@@ -108,6 +115,7 @@ export default function EditProductDialog(props: {
                     setProductOwnerErr(parse.productOwnerName);
                     setDevelopersErr(parse.developers);
                     setMethodologyErr(parse.methodology);
+                    setLocationErr(parse.location);
                 } catch (error2) {
                     props.displayError(error.message);
                 }
@@ -216,6 +224,21 @@ export default function EditProductDialog(props: {
                         <MenuItem value={"waterfall"}>Waterfall</MenuItem>
                     </Select>
                 </FormControl>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="edit_dialog_location"
+                    label="Location"
+                    type="text"
+                    fullWidth
+                    value={location}
+                    error={locationErr != ""}
+                    helperText={locationErr}
+                    variant="standard"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        handleFieldChange(event, setLocation);
+                    }}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleDelete}>Delete</Button>

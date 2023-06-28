@@ -18,9 +18,15 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
+  min-width: 1000px;
   width: 80%;
 }
 
 .menu-bar-item {
   margin-left: 10px;
+}
+
+.custom-table-cell {
+  white-space: normal;
+  word-wrap: break-word;
 }

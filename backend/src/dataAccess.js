@@ -55,6 +55,7 @@ function verifyProduct(product) {
         startDate: "",
         scrumMasterName: "",
         methodology: "",
+        location: "",
     };
     if (!product) {
         oProductError.mainMsg = "Product cannot be empty.";
@@ -101,6 +102,10 @@ function verifyProduct(product) {
         oProductError.methodology = "Invalid methodology";
         bProductContainsError = true;
     }
+    if (!isValidString(product.location)) {
+        oProductError.location = "Invalid location";
+        bProductContainsError = true;
+    }
     if (bProductContainsError) {
         return oProductError;
     }
@@ -130,6 +135,7 @@ function postProduct(product) {
             scrumMasterName: product.scrumMasterName,
             startDate: product.startDate,
             methodology: product.methodology,
+            location: product.location,
         };
         inMemoryDataDict[newProductId] = newProduct;
         fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));
@@ -160,6 +166,7 @@ function putProduct(product) {
         scrumMasterName: product.scrumMasterName,
         startDate: product.startDate,
         methodology: product.methodology,
+        location: product.location,
     };
     inMemoryDataDict[product.productId] = newProduct;
     fs.writeFileSync(dataFilePath, JSON.stringify(Object.values(inMemoryDataDict), null, 2));

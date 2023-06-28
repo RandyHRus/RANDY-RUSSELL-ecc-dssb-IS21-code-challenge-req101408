@@ -43,6 +43,14 @@ const lastNames = [
     "Gomez",
 ];
 
+const locations = [
+    "https://github.com/bcgov/design-system",
+    "https://github.com/bcgov/BC-Policy-Framework-For-GitHub",
+    "https://github.com/bcgov/api-guidelines",
+    "https://github.com/bcgov/digital-principles"
+
+]
+
 const methodologies = ["agile", "waterfall"];
 
 function generateRandomName() {
@@ -73,6 +81,7 @@ for (let i = 0; i < count; i++) {
     let scrumMasterName = generateRandomName();
     let startDate = "2023/03/25";
     let methodology = getRandomItem(methodologies);
+    let location = getRandomItem(locations);
 
     let newProduct = {
         productId,
@@ -82,6 +91,7 @@ for (let i = 0; i < count; i++) {
         scrumMasterName,
         startDate,
         methodology,
+        location
     };
 
     result.push(newProduct);

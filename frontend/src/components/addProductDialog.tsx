@@ -34,6 +34,7 @@ export default function AddProductDialog(props: {
     const [developers, setDevelopers] = useState<string>("");
     const [startDate, setStartDate] = useState<string>("");
     const [methodology, setMethodology] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
 
     const [productNameErr, setProductNameErr] = useState<string>("");
     const [scrumMasterErr, setScrumMasterErr] = useState<string>("");
@@ -41,6 +42,7 @@ export default function AddProductDialog(props: {
     const [developersErr, setDevelopersErr] = useState<string>("");
     const [startDateErr, setStartDateErr] = useState<string>("");
     const [methodologyErr, setMethodologyErr] = useState<string>("");
+    const [locationErr, setLocationErr] = useState<string>("");
 
     // Reset all fields
     function reset() {
@@ -50,6 +52,7 @@ export default function AddProductDialog(props: {
         setDevelopers("");
         setStartDate("");
         setMethodology("");
+        setLocation("");
 
         setProductNameErr("");
         setScrumMasterErr("");
@@ -57,6 +60,7 @@ export default function AddProductDialog(props: {
         setDevelopersErr("");
         setStartDateErr("");
         setMethodologyErr("");
+        setLocationErr("");
     }
 
     /**
@@ -79,6 +83,7 @@ export default function AddProductDialog(props: {
             startDate,
             scrumMasterName,
             methodology,
+            location,
         };
         createProduct(productRequest)
             .then((productResult) => {
@@ -95,6 +100,7 @@ export default function AddProductDialog(props: {
                     setDevelopersErr(parse.developers);
                     setStartDateErr(parse.startDate);
                     setMethodologyErr(parse.methodology);
+                    setLocationErr(parse.location);
                 } catch (error2) {
                     props.displayError(error.message);
                 }
@@ -198,6 +204,20 @@ export default function AddProductDialog(props: {
                         <MenuItem value={"waterfall"}>Waterfall</MenuItem>
                     </Select>
                 </FormControl>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="add_dialog_location"
+                    label="Location"
+                    type="text"
+                    fullWidth
+                    error={locationErr != ""}
+                    helperText={locationErr}
+                    variant="standard"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleFieldChange(event, setLocation)
+                    }
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleCancel}>Cancel</Button>

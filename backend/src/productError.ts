@@ -9,4 +9,5 @@ export default interface ProductError {
     startDate: string;
     scrumMasterName: string;
     methodology: string;
+    location: string;
 }
