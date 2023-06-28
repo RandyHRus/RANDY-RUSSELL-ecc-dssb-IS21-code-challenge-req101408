@@ -16,19 +16,12 @@ const DIALOG_IDS = {
 export default function Home() {
     //All products found in the app.
     const [products, setProducts] = useState<Product[]>([]);
-    //Filtered products after search, these will be the ones being displayed on to the page.
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
     const [dialogOpen, setDialogOpen] = React.useState(-1);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(
         null
     );
     const [errorMsg, setErrorMsg] = useState<string>("");
-
-    const [searchScrumMasterFilter, setSearchScrumMasterFilter] =
-        useState<string>("");
-    const [searchDeveloperFilter, setSearchDeveloperFilter] =
-        useState<string>("");
 
     function handleDialogClose() {
         setDialogOpen(-1);
@@ -37,18 +30,6 @@ export default function Home() {
 
     function handleDialogOpen(dialogID: number) {
         setDialogOpen(dialogID);
-    }
-
-    function handleDeveloperSearchFieldChange(
-        event: React.ChangeEvent<HTMLInputElement>
-    ) {
-        setSearchDeveloperFilter(event.target.value);
-    }
-
-    function handleScrumMasterSearchFieldChange(
-        event: React.ChangeEvent<HTMLInputElement>
-    ) {
-        setSearchScrumMasterFilter(event.target.value);
     }
 
     function refreshProducts() {
@@ -65,38 +46,6 @@ export default function Home() {
     function handleErrorClose() {
         setErrorMsg("");
     }
-
-    // Updates filteredProducts based to search fields.
-    useEffect(() => {
-        function applyDeveloperFilter(products: Product[]): Product[] {
-            return products.filter((p) => {
-                for (const d of p.developers) {
-                    if (
-                        d
-                            .toLowerCase()
-                            .includes(
-                                searchDeveloperFilter.toLowerCase().trim()
-                            )
-                    ) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-        }
-
-        function applyScrumMasterFilter(products: Product[]): Product[] {
-            return products.filter((p) => {
-                return p.scrumMasterName
-                    .toLowerCase()
-                    .includes(searchScrumMasterFilter.toLowerCase().trim());
-            });
-        }
-
-        let ps: Product[] = applyDeveloperFilter(products);
-        ps = applyScrumMasterFilter(ps);
-        setFilteredProducts(ps);
-    }, [searchDeveloperFilter, searchScrumMasterFilter, products]);
 
     // Fetch products on mount.
     useEffect(() => {
@@ -116,28 +65,6 @@ export default function Home() {
             </Head>
             <main className={styles.main} style={{ minWidth: "1000px" }}>
                 <div className={styles["menu-bar-wrapper"]}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="scrum_master_search_field"
-                        label="Search scrum master"
-                        type="text"
-                        className={styles["menu-bar-item"]}
-                        variant="outlined"
-                        onChange={handleScrumMasterSearchFieldChange}
-                        value={searchScrumMasterFilter}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="developer_search_field"
-                        label="Search developer"
-                        type="text"
-                        className={styles["menu-bar-item"]}
-                        variant="outlined"
-                        onChange={handleDeveloperSearchFieldChange}
-                        value={searchDeveloperFilter}
-                    />
                     <Button
                         variant="contained"
                         className={styles["menu-bar-item"]}
@@ -150,7 +77,7 @@ export default function Home() {
                 </div>
                 <div className={styles["products-table-wrapper"]}>
                     <ProductsTable
-                        products={filteredProducts}
+                        products={products}
                         handleEditDialogOpen={function (product: Product) {
                             setSelectedProduct(product);
                             setDialogOpen(DIALOG_IDS.editProductDialog);
