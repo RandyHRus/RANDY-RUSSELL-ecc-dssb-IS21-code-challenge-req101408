@@ -8,7 +8,7 @@ import Product from "./util/product";
 const fs = require("fs");
 const path = require("path");
 
-const inMemoryDataDict: Record<number, Product> = {};
+let inMemoryDataDict: Record<number, Product> = {};
 
 const dataFilePath = path.join(__dirname, "..", "productsData.json");
 
@@ -22,6 +22,7 @@ const MAX_DEVELOPERS = 5;
  */
 function loadProductsFromFile() {
     try {
+        inMemoryDataDict = {};
         let res = fs.readFileSync(dataFilePath);
         let data = JSON.parse(res);
         for (let i = 0; i < data.length; i++) {
@@ -29,6 +30,7 @@ function loadProductsFromFile() {
             let productId: number = product.productId;
             inMemoryDataDict[productId] = product;
         }
+        console.log("loaded products into memory");
     } catch (e) {
         console.error(e);
         console.error(
@@ -44,6 +46,7 @@ function loadProductsFromFile() {
  * @returns {Product[]} list of products
  */
 function getAllProducts() {
+    console.log("getting products");
     return Object.entries(inMemoryDataDict).map(([key, value]) => value);
 }
 

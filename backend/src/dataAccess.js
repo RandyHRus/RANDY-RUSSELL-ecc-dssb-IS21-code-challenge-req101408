@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 const fs = require("fs");
 const path = require("path");
-const inMemoryDataDict = {};
+let inMemoryDataDict = {};
 const dataFilePath = path.join(__dirname, "..", "productsData.json");
 const MAX_DEVELOPERS = 5;
 /**
@@ -16,6 +16,7 @@ const MAX_DEVELOPERS = 5;
  */
 function loadProductsFromFile() {
     try {
+        inMemoryDataDict = {};
         let res = fs.readFileSync(dataFilePath);
         let data = JSON.parse(res);
         for (let i = 0; i < data.length; i++) {
@@ -23,6 +24,7 @@ function loadProductsFromFile() {
             let productId = product.productId;
             inMemoryDataDict[productId] = product;
         }
+        console.log("loaded products into memory");
     }
     catch (e) {
         console.error(e);
@@ -36,6 +38,7 @@ function loadProductsFromFile() {
  * @returns {Product[]} list of products
  */
 function getAllProducts() {
+    console.log("getting products");
     return Object.entries(inMemoryDataDict).map(([key, value]) => value);
 }
 /**
