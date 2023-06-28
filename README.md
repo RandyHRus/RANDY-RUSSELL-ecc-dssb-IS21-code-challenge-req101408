@@ -2,7 +2,7 @@
 
 ## 1. Setup and run backend. 
 
-Navigate to folder RANDY-RUSSELL-ecc-dssb-IS21-code-challenge-req101408/backend and run these commands
+Navigate to folder /backend and run these commands
 ```
 npm install
 ```
@@ -12,7 +12,7 @@ npm run dev
 the app will start on port 3000.
 
 ## 2. Setup and run frontend
-In a separate terminal, navigate to folder RANDY-RUSSELL-ecc-dssb-IS21-code-challenge-req101408/frontend and run these commands
+In a separate terminal, navigate to folder /frontend and run these commands
 ```
 npm install
 ```
